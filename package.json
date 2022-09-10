@@ -1,0 +1,18 @@
+{
+  "name": "com.mochenghh.fixedmath",
+  "version": "1.0.0",
+  "displayName": "Fixed Math",
+  "description": "Fixed Math",
+  "unity": "2021.3",
+  "unityRelease": "0b5",
+  "dependencies": {
+    "com.unity.mathematics": "1.2.6"
+  },
+  "keywords": [],
+  "author": {
+    "name": "mocheng",
+    "email": "mochenghh@gmail.com"
+  },
+  "hideInEditor": false,
+  "type": "tool"
+}
