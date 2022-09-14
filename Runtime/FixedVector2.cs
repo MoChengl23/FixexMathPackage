@@ -63,6 +63,7 @@ namespace FixedMath
                         return X;
                     case 1:
                         return Y;
+
                     default:
                         return 0;
                 }
@@ -113,7 +114,18 @@ namespace FixedMath
         {
             return a * b;
         }
-
+        //return dot
+        // public static FixedInt operator *(FixedVector2 a, FixedVector2 b)
+        // {
+        //     FixedInt X = a.X * b.X;
+        //     FixedInt Y = a.Y * b.Y;
+        //     if ((a.X != 0 && b.X != 0 && X == 0) ||
+        //           (a.Y != 0 && b.Y != 0 && Y == 0))
+        //     {
+        //         return new FixedInt((long)1);
+        //     }
+        //     return X + Y;
+        // }
 
         public static FixedVector2 operator /(FixedVector2 a, FixedInt b)
         {
@@ -144,27 +156,18 @@ namespace FixedMath
         {
             get => new FixedVector2(-1, -1);
         }
-        /// <summary>
-        /// X * X + Y * Y
-        /// </summary>
-        /// <value></value>
+
         public FixedInt square
         {
             get => X * X + Y * Y;
 
         }
-        /// <summary>
-        /// sqrt(X*X + Y*Y)
-        /// </summary>
-        /// <value></value>
+
         public FixedInt magnitude
         {
             get => FixedCalculate.Sqrt(this.square);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <value></value>
+
         public FixedVector2 normalize
         {
             get
@@ -177,47 +180,46 @@ namespace FixedMath
                 return new FixedVector2(0, 0);
             }
         }
-        // public static FixedVector2 Normalize(FixedVector2 a)
-        // {
-        //     if (a.magnitude > 0)
-        //     {
-        //         FixedInt rate = (FixedInt)1 / a.magnitude;
-        //         return new FixedVector2(a.X * rate, a.Y * rate);
-        //     }
-        //     return new FixedVector2(0, 0);
-        // }
+        public static FixedVector2 Normalize(FixedVector2 a)
+        {
+            if (a.magnitude > 0)
+            {
+                FixedInt rate = (FixedInt)1 / a.magnitude;
+                return new FixedVector2(a.X * rate, a.Y * rate);
+            }
+            return new FixedVector2(0, 0);
+        }
         /// <summary>
         /// a.X * b.X + a.Y * b.Y
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-
         public static FixedInt Dot(FixedVector2 a, FixedVector2 b)
         {
             return a.X * b.X + a.Y * b.Y;
         }
 
-        // /// <summary>
-        // /// 向量叉乘，返回同时垂直两向量的向量
-        // /// </summary>
-        // /// <param name="a"></param>
-        // /// <param name="b"></param>
-        // /// <returns></returns>
+        // / <summary>
+        // / 向量叉乘，返回同时垂直两向量的向量
+        // / </summary>
+        // / <param name="a"></param>
+        // / <param name="b"></param>
+        // / <returns></returns>
         // public static FixedVector2 Cross(FixedVector2 a,FixedVector2 b){
         //     return new FixedVector2(a.Y *b.z - a.z*b.Y,a.z*b.X-a.X*b.z, a.X*b.Y - a.Y*b.X);
         // }
 
 
         /// <summary>
-        /// 返回行列式的值,a.X * b.Y - a.Y + b.X
+        /// a.X * b.Y - a.Y + b.X
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
         public static FixedInt Det(FixedVector2 a, FixedVector2 b)
         {
-            return a.X * b.Y - a.Y + b.X;
+            return a.X * b.Y - a.Y * b.X;
         }
 
 
@@ -251,6 +253,7 @@ namespace FixedMath
         {
             return Det(a - c, b - a);
         }
+
         public static bool IntheSameSide(FixedVector2 baseone, FixedVector2 a, FixedVector2 b)
         {
             return Det(baseone, a).sign == Det(baseone, b).sign;
@@ -266,7 +269,7 @@ namespace FixedMath
 
         public override int GetHashCode()
         {
-            return X.GetHashCode() ;
+            return X.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -294,39 +297,39 @@ namespace FixedMath
 
 
 
-        // public static FixedInt abs(FixedVector2 vector)
-        // {
-        //     return sqrt(absSq(vector));
-        // }
-        // public static FixedInt absSq(FixedVector2 vector)
-        // {
-        //     return vector * vector;
-        // }
+        public static FixedInt abs(FixedVector2 vector)
+        {
+            return sqrt(absSq(vector));
+        }
+        public static FixedInt absSq(FixedVector2 vector)
+        {
+            return vector * vector;
+        }
 
         // public static FixedVector2 normalize(FixedVector2 vector)
         // {
         //     // if(abs(vector) == 0) return vector;
         //     return vector / abs(vector);
         // }
-        // public static FixedInt det(FixedVector2 vector1, FixedVector2 vector2)
-        // {
-        //     return vector1.X * vector2.Y - vector1.Y * vector2.X;
-        // }
-        // public static FixedInt fabs(FixedInt scalar)
-        // {
-        //     if (scalar >= 0)
-        //         return scalar;
-        //     return -scalar;
+        public static FixedInt det(FixedVector2 vector1, FixedVector2 vector2)
+        {
+            return vector1.X * vector2.Y - vector1.Y * vector2.X;
+        }
+        public static FixedInt fabs(FixedInt scalar)
+        {
+            if (scalar >= 0)
+                return scalar;
+            return -scalar;
 
-        // }
-        // public static FixedInt sqr(FixedInt scalar)
-        // {
-        //     return scalar * scalar;
-        // }
-        // public static FixedInt sqrt(FixedInt scalar)
-        // {
-        //     return FixedCalculate.Sqrt(scalar);
-        // }
+        }
+        public static FixedInt sqr(FixedInt scalar)
+        {
+            return scalar * scalar;
+        }
+        public static FixedInt sqrt(FixedInt scalar)
+        {
+            return FixedCalculate.Sqrt(scalar);
+        }
 
 
 

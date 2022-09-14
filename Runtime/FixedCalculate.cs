@@ -1,12 +1,11 @@
-using System.Numerics;
 using System;
 namespace FixedMath
 {
     public class FixedCalculate
     {
 
-        public static FixedInt superSmallValue = (FixedInt)(long)1 << 5;
-        public static FixedInt superBigValue = 9999;
+        public static readonly FixedInt superSmallValue = (FixedInt)(long)1;
+        public static readonly FixedInt superBigValue = (FixedInt)(long)1 << 20;
 
         /// <summary>
         /// 求平方
@@ -59,45 +58,32 @@ namespace FixedMath
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
+
         public static FixedInt Clamp(FixedInt input, FixedInt min, FixedInt max)
         {
             if (input < min) return min;
             if (input > max) return max;
             return input;
         }
-        /// <summary>
-        /// min
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+
         public static FixedInt Min(FixedInt a, FixedInt b)
         {
             if (a <= b) return a;
             return b;
         }
-        /// <summary>
-        /// max
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
         public static FixedInt Max(FixedInt a, FixedInt b)
         {
             if (a >= b) return a;
             return b;
         }
 
-        /// <summary>
-        /// 模长
-        /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
+
         public static FixedInt Abs(FixedInt a)
         {
             if (a >= 0) return a;
             return -a;
         }
+
 
 
 
@@ -150,19 +136,18 @@ namespace FixedMath
         {
             return FixedVector2.Dot(a, b);
         }
-
         /// <summary>
-        /// 标准化
+        /// vector / Abs(vector)
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         public static FixedVector2 Normalize(FixedVector2 vector)
         {
-            // return vector / Abs(vector);
-            return vector.normalize;
+            return vector / Abs(vector);
         }
+
         /// <summary>
-        /// 返回行列式的值,a.X * b.Y - a.Y + b.X
+        /// vector1.X * vector2.Y - vector1.Y * vector2.X
         /// </summary>
         /// <param name="vector1"></param>
         /// <param name="vector2"></param>
@@ -170,30 +155,53 @@ namespace FixedMath
         public static FixedInt Det(FixedVector2 vector1, FixedVector2 vector2)
         {
             return FixedVector2.Det(vector1, vector2);
-            //  vector1.X * vector2.Y - vector1.Y * vector2.X;
+            // return vector1.X * vector2.Y - vector1.Y * vector2.X;
         }
+
+
+        /// <summary>
+        /// Computes the squared distance from a line segment with the  specified endpoints to a specified point.
+        /// </summary>
+        /// <param name="vector1">The first endpoint of the line segment.</param>
+        /// <param name="vector2">The second endpoint of the line segment.</param>
+        /// <param name="vector3">The point to which the squared distance is to be calculated.</param>
+        /// <returns>The squared distance from the line segment to the point.</returns>
         public static FixedInt DistSqPointLineSegment(FixedVector2 vector1, FixedVector2 vector2, FixedVector2 vector3)
         {
-            return FixedVector2.DistSqPointLineSegment(vector1, vector2, vector3);
+            FixedInt r = ((vector3 - vector1) * (vector2 - vector1)) / (vector2 - vector1).square;
+
+            if (r < 0)
+            {
+                return (vector3 - vector1).square;
+            }
+
+            if (r > 1)
+            {
+                return (vector3 - vector2).square;
+            }
+
+            return (vector3 - (vector1 + r * (vector2 - vector1))).square;
         }
-        /// <summary>
-        /// 绝对值
-        /// </summary>
-        /// <param name="scalar"></param>
-        /// <returns></returns>
-        public static FixedInt Fabs(FixedInt scalar)
+        public static FixedInt fabs(FixedInt scalar)
         {
             if (scalar >= 0)
                 return scalar;
             return -scalar;
 
         }
-        
-        public static FixedInt LeftOf(FixedVector2 a, FixedVector2 b, FixedVector2 c)
+        public static bool IntheSameSide(FixedVector2 baseone, FixedVector2 a, FixedVector2 b)
         {
-            return FixedVector2.LeftOf(a, b, c);
+            return Det(baseone, a).sign == Det(baseone, b).sign;
+
+
         }
 
+        public static FixedInt LeftOf(FixedVector2 a, FixedVector2 b, FixedVector2 c)
+        {
+            return Det(a - c, b - a);
+        }
+   
+    
         #endregion
     }
 }
